@@ -1,0 +1,332 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=MedievalSharp&family=Orbitron:wght@400;700;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.5;
+    background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+    min-height: 100vh;
+  }
+
+  html, body, #root {
+    height: 100%;
+  }
+
+  /* RPG-style scrollbar */
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: linear-gradient(to bottom, #2d1810, #1a0f08);
+    border-radius: 6px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #8B4513, #CD7F32);
+    border-radius: 6px;
+    border: 2px solid #2d1810;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(to bottom, #CD7F32, #FFD700);
+  }
+}
+
+@layer components {
+  .rpg-card {
+    @apply bg-gradient-to-br from-stone-100 via-amber-50 to-yellow-100;
+    @apply border-4 border-amber-600 rounded-2xl shadow-rpg;
+    @apply relative overflow-hidden;
+    background-image: 
+      radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+      url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F4E4BC" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+  }
+
+  .rpg-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.8), transparent);
+  }
+
+  .rpg-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(139, 69, 19, 0.6), transparent);
+  }
+
+  .rpg-button {
+    @apply relative overflow-hidden font-semibold text-white;
+    @apply border-2 border-amber-600 rounded-xl shadow-rpg;
+    @apply transition-all duration-300 transform;
+    @apply bg-gradient-to-br from-amber-600 via-yellow-600 to-orange-600;
+    background-image: 
+      linear-gradient(45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.1) 25%, transparent 25%);
+    background-size: 20px 20px;
+  }
+
+  .rpg-button:hover {
+    @apply shadow-rpg-hover scale-105;
+    @apply bg-gradient-to-br from-yellow-500 via-amber-500 to-orange-500;
+  }
+
+  .rpg-button:active {
+    @apply shadow-rpg-pressed scale-95;
+  }
+
+  .rpg-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  .rpg-button:hover::before {
+    left: 100%;
+  }
+
+  .magical-button {
+    @apply relative overflow-hidden font-semibold text-white;
+    @apply border-2 border-purple-500 rounded-xl shadow-magical;
+    @apply transition-all duration-300 transform;
+    @apply bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-600;
+    background-image: 
+      radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+  }
+
+  .magical-button:hover {
+    @apply shadow-magical scale-105 animate-pulse-magical;
+  }
+
+  .emerald-button {
+    @apply bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500;
+    @apply border-emerald-400 shadow-lg;
+  }
+
+  .emerald-button:hover {
+    @apply from-emerald-400 via-green-400 to-teal-400 shadow-xl scale-105;
+  }
+
+  .ruby-button {
+    @apply bg-gradient-to-br from-red-500 via-rose-500 to-pink-500;
+    @apply border-red-400 shadow-lg;
+  }
+
+  .ruby-button:hover {
+    @apply from-red-400 via-rose-400 to-pink-400 shadow-xl scale-105;
+  }
+
+  .progress-bar-rpg {
+    @apply relative h-4 bg-gradient-to-r from-stone-700 to-stone-600 rounded-full overflow-hidden;
+    @apply border-2 border-amber-700 shadow-inner;
+  }
+
+  .progress-fill-rpg {
+    @apply h-full bg-gradient-to-r from-emerald-400 via-green-400 to-lime-400;
+    @apply relative overflow-hidden;
+    background-image: 
+      linear-gradient(45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%);
+    background-size: 8px 8px;
+    animation: shimmer 2s linear infinite;
+  }
+
+  .progress-fill-rpg::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+    border-radius: 4px 4px 0 0;
+  }
+
+  .number-pad-button {
+    @apply aspect-square rounded-xl font-bold text-xl transition-all duration-200;
+    @apply transform hover:scale-105 shadow-md bg-gradient-to-br;
+    @apply from-stone-100 to-amber-100 border-2 border-amber-300;
+    @apply text-amber-900 hover:from-amber-100 hover:to-yellow-100;
+    @apply hover:border-amber-400 hover:shadow-lg;
+  }
+
+  .number-pad-button:active {
+    @apply scale-95 shadow-inner;
+  }
+
+  .special-button {
+    @apply bg-gradient-to-br from-stone-500 to-slate-600;
+    @apply text-white border-stone-400;
+  }
+
+  .special-button:hover {
+    @apply from-stone-400 to-slate-500 border-stone-300;
+  }
+
+  .table-progress-card {
+    @apply relative p-4 rounded-xl transition-all duration-300;
+    @apply bg-gradient-to-br from-amber-50 to-yellow-100;
+    @apply border-2 border-amber-300 shadow-md;
+  }
+
+  .table-progress-card.active {
+    @apply border-blue-400 shadow-magical scale-105;
+    @apply animate-glow;
+  }
+
+  .table-progress-card.completed {
+    @apply border-emerald-400 bg-gradient-to-br from-emerald-50 to-green-100;
+  }
+
+  .input-rpg {
+    @apply w-full text-4xl font-bold text-center bg-transparent;
+    @apply border-b-4 border-amber-400 focus:border-yellow-500 outline-none py-2;
+    @apply text-amber-900 placeholder-amber-600;
+    @apply transition-all duration-300;
+    font-family: 'Orbitron', monospace;
+  }
+
+  .input-rpg:focus {
+    @apply shadow-golden;
+  }
+
+  .glass-rpg {
+    @apply bg-gradient-to-br from-white/20 to-amber-100/30;
+    @apply backdrop-blur-lg border border-amber-300/50;
+    @apply shadow-rpg;
+  }
+
+  .parchment-bg {
+    @apply bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(139, 69, 19, 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(205, 127, 50, 0.05) 0%, transparent 50%),
+      url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23F4E4BC" fill-opacity="0.1"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+  }
+
+  .gradient-text-rpg {
+    @apply bg-gradient-to-r from-amber-600 via-yellow-600 to-orange-600 bg-clip-text text-transparent;
+    font-family: 'Cinzel', serif;
+  }
+
+  .title-rpg {
+    font-family: 'Cinzel', serif;
+    @apply text-amber-900 font-bold;
+    text-shadow: 2px 2px 4px rgba(139, 69, 19, 0.3);
+  }
+
+  .subtitle-rpg {
+    font-family: 'MedievalSharp', cursive;
+    @apply text-amber-700;
+  }
+
+  .animate-success {
+    animation: success-burst 0.6s ease-out;
+  }
+
+  .animate-error {
+    animation: error-shake 0.5s ease-in-out;
+  }
+
+  @keyframes success-burst {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+
+  @keyframes error-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+}
+
+@layer utilities {
+  .animation-delay-200 {
+    animation-delay: 200ms;
+  }
+  
+  .animation-delay-400 {
+    animation-delay: 400ms;
+  }
+  
+  .animation-delay-600 {
+    animation-delay: 600ms;
+  }
+
+  .text-shadow-rpg {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .border-ornate {
+    border-image: linear-gradient(45deg, #CD7F32, #FFD700, #CD7F32) 1;
+  }
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #FFD700;
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for all interactive elements */
+button, input, select, textarea {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom selection colors */
+::selection {
+  background: rgba(255, 215, 0, 0.3);
+  color: #8B4513;
+}
+
+/* Loading animation for buttons */
+.loading {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: loading-shimmer 1.5s infinite;
+}
+
+@keyframes loading-shimmer {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
