@@ -25,19 +25,22 @@ export default {
           moss: '#8A9A5B',
         }
       },
+      borderWidth: {
+        '3': '3px',
+      },
       boxShadow: {
-        'rpg': '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-        'rpg-hover': '0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-        'rpg-pressed': '0 4px 16px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.2)',
+        'rpg': '0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+        'rpg-hover': '0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+        'rpg-pressed': '0 2px 8px rgba(0, 0, 0, 0.4), inset 0 2px 4px rgba(0, 0, 0, 0.2)',
         'magical': '0 0 20px rgba(147, 51, 234, 0.5), 0 0 40px rgba(147, 51, 234, 0.3)',
         'golden': '0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3)',
       },
       animation: {
-        'float': 'float 3s ease-in-out infinite',
+        'float': 'float 6s ease-in-out infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
         'shimmer': 'shimmer 2s linear infinite',
-        'bounce-gentle': 'bounce-gentle 2s ease-in-out infinite',
-        'pulse-magical': 'pulse-magical 2s ease-in-out infinite',
+        'bounce-gentle': 'bounce-gentle 3s ease-in-out infinite',
+        'pulse-magical': 'pulse-magical 3s ease-in-out infinite',
         'slide-in': 'slide-in 0.5s ease-out',
         'scale-in': 'scale-in 0.3s ease-out',
         'wiggle': 'wiggle 0.5s ease-in-out',
@@ -45,7 +48,7 @@ export default {
       keyframes: {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-8px)' },
         },
         glow: {
           '0%': { boxShadow: '0 0 5px rgba(147, 51, 234, 0.5)' },
@@ -57,11 +60,11 @@ export default {
         },
         'bounce-gentle': {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-5px)' },
+          '50%': { transform: 'translateY(-3px)' },
         },
         'pulse-magical': {
           '0%, 100%': { opacity: 1, transform: 'scale(1)' },
-          '50%': { opacity: 0.8, transform: 'scale(1.05)' },
+          '50%': { opacity: 0.9, transform: 'scale(1.02)' },
         },
         'slide-in': {
           '0%': { transform: 'translateX(-100%)', opacity: 0 },

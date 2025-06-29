@@ -45,10 +45,10 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4 relative overflow-hidden`}>
-      {/* Animated background elements */}
+      {/* Animated background elements - More subtle */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 right-10 w-16 h-16 bg-amber-300/20 rounded-full animate-float"></div>
-        <div className="absolute bottom-40 left-10 w-20 h-20 bg-purple-300/20 rounded-full animate-float animation-delay-400"></div>
+        <div className="absolute top-20 right-10 w-16 h-16 bg-amber-300/10 rounded-full animate-float"></div>
+        <div className="absolute bottom-40 left-10 w-20 h-20 bg-purple-300/10 rounded-full animate-float animation-delay-400"></div>
       </div>
 
       <div className="max-w-2xl mx-auto relative z-10">
@@ -158,21 +158,21 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
           <div className="flex flex-wrap gap-3">
             <button
               onClick={selectAll}
-              className="emerald-button border-2 rounded-xl px-4 py-2 font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-md flex items-center space-x-2"
+              className="emerald-button px-4 py-2 font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-md flex items-center space-x-2"
             >
               <CheckSquare className="w-4 h-4" />
               <span>All Tables</span>
             </button>
             <button
               onClick={selectRandom}
-              className="magical-button border-2 rounded-xl px-4 py-2 font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-md flex items-center space-x-2"
+              className="magical-button px-4 py-2 font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-md flex items-center space-x-2"
             >
               <Shuffle className="w-4 h-4" />
               <span>Random Quest</span>
             </button>
             <button
               onClick={clearSelection}
-              className="special-button border-2 rounded-xl px-4 py-2 font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-md"
+              className="special-button px-4 py-2 font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-md"
             >
               Clear All
             </button>

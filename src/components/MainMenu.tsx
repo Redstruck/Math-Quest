@@ -22,19 +22,19 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} flex items-center justify-center p-4 relative overflow-hidden`}>
-      {/* Animated background elements */}
+      {/* Animated background elements - More subtle */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-300/20 rounded-full animate-float animation-delay-200"></div>
-        <div className="absolute top-32 right-20 w-16 h-16 bg-purple-300/20 rounded-full animate-float animation-delay-400"></div>
-        <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-blue-300/20 rounded-full animate-float animation-delay-600"></div>
-        <div className="absolute bottom-32 right-1/3 w-12 h-12 bg-green-300/20 rounded-full animate-float"></div>
+        <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-300/10 rounded-full animate-float animation-delay-200"></div>
+        <div className="absolute top-32 right-20 w-16 h-16 bg-purple-300/10 rounded-full animate-float animation-delay-400"></div>
+        <div className="absolute bottom-20 left-1/4 w-24 h-24 bg-blue-300/10 rounded-full animate-float animation-delay-600"></div>
+        <div className="absolute bottom-32 right-1/3 w-12 h-12 bg-green-300/10 rounded-full animate-float"></div>
       </div>
 
       <div className="max-w-md w-full relative z-10">
         {/* Header */}
         <div className="text-center mb-12 animate-scale-in">
           <div className="relative mb-8">
-            <div className={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${theme.colors.accent} rounded-3xl shadow-rpg animate-pulse-magical`}>
+            <div className={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${theme.colors.accent} rounded-3xl shadow-rpg`}>
               <Sword className="w-12 h-12 text-white" />
             </div>
             <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-golden animate-bounce-gentle">
@@ -87,7 +87,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
 
           <button
             onClick={onOpenCollection}
-            className="w-full emerald-button border-2 rounded-xl py-5 px-6 text-lg font-semibold text-white transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-3 animate-slide-in animation-delay-600"
+            className="w-full emerald-button py-5 px-6 text-lg flex items-center justify-center space-x-3 animate-slide-in animation-delay-600"
           >
             <Star className="w-6 h-6" />
             <span className="font-bold">Trophy Hall</span>
