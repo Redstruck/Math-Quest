@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Play, ShoppingBag, Star, Sword, Shield } from 'lucide-react';
+import { Play, ShoppingBag, Star, Sword } from 'lucide-react';
 import { getPoints, getActivePet } from '../utils/localStorage';
 import { getCurrentThemeData, applyThemeToDocument } from '../utils/themes';
 import { pets } from '../data/shopItems';
@@ -36,9 +36,6 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
           <div className="relative mb-8">
             <div className={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${theme.colors.accent} rounded-3xl shadow-rpg`}>
               <Sword className="w-12 h-12 text-white" />
-            </div>
-            <div className="absolute -top-2 -right-2 w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center shadow-golden animate-bounce-gentle">
-              <Shield className="w-4 h-4 text-white" />
             </div>
           </div>
           
