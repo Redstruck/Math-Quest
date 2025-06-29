@@ -133,6 +133,7 @@ const Gameplay: React.FC<GameplayProps> = ({
     const isCorrect = answer === currentQuestion.answer;
 
     if (isCorrect) {
+      console.log('Correct answer! Triggering confetti...');
       setShowFeedback('correct');
       setShowConfetti(true); // Trigger confetti animation
       
@@ -154,9 +155,10 @@ const Gameplay: React.FC<GameplayProps> = ({
       saveTotalCorrectAnswers(newTotal);
 
       setTimeout(() => {
+        console.log('Moving to next question...');
         setShowConfetti(false);
         moveToNextQuestion();
-      }, 2000);
+      }, 2500);
     } else {
       setShowFeedback('incorrect');
       setAttempts(prev => prev + 1);
@@ -230,11 +232,16 @@ const Gameplay: React.FC<GameplayProps> = ({
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4 relative overflow-hidden`}>
-      {/* Confetti Effect */}
-      <ConfettiEffect 
-        trigger={showConfetti} 
-        onComplete={() => setShowConfetti(false)} 
-      />
+      {/* Confetti Effect - positioned at the top level */}
+      {showConfetti && (
+        <ConfettiEffect 
+          trigger={showConfetti} 
+          onComplete={() => {
+            console.log('Confetti completed callback');
+            setShowConfetti(false);
+          }} 
+        />
+      )}
 
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
