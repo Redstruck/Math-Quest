@@ -3,7 +3,7 @@ import { ArrowLeft, SkipForward, Target, Zap, CheckCircle, Crown, Flame } from '
 import { Question, GameSession, TableProgress } from '../types';
 import { addPoints, saveTotalCorrectAnswers, getTotalCorrectAnswers, getActivePet } from '../utils/localStorage';
 import { getCurrentThemeData } from '../utils/themes';
-import { getTableProgress, getTableColors, getNextQuestion } from '../utils/gameLogic';
+import { getTableProgress, getTableColors, getNextQuestion, refreshQuestionPool } from '../utils/gameLogic';
 import { pets } from '../data/shopItems';
 import ConfettiEffect from './ConfettiEffect';
 
@@ -30,6 +30,7 @@ const Gameplay: React.FC<GameplayProps> = ({
   const [attempts, setAttempts] = useState(0);
   const [endlessCorrectCount, setEndlessCorrectCount] = useState(0);
   const [canEndSession, setCanEndSession] = useState(false);
+  const [lastQuestionId, setLastQuestionId] = useState<string | null>(null);
   const [session, setSession] = useState<GameSession>({
     correctAnswers: 0,
     wrongAttempts: 0,
@@ -59,7 +60,8 @@ const Gameplay: React.FC<GameplayProps> = ({
 
     if (mode === 'practice') {
       const allCompleted = updatedProgress.every(table => table.completed === table.total);
-      if (allCompleted && currentQuestion) {
+      if (allCompleted && questions.length > 0) {
+        console.log('🏆 Practice mode completed - all questions answered');
         const completedSession = {
           ...session,
           endTime: Date.now()
@@ -69,7 +71,7 @@ const Gameplay: React.FC<GameplayProps> = ({
     } else if (mode === 'endless') {
       setCanEndSession(endlessCorrectCount >= 20);
     }
-  }, [questions, mode, endlessCorrectCount, session, currentQuestion, onSessionComplete]);
+  }, [questions, mode, endlessCorrectCount, session, onSessionComplete]);
 
   // Keyboard input handling
   useEffect(() => {
@@ -110,19 +112,41 @@ const Gameplay: React.FC<GameplayProps> = ({
   };
 
   const moveToNextQuestion = () => {
-    const nextQuestionData = getNextQuestion(questions, mode, currentQuestionIndex);
+    console.log(`🎯 Moving to next question - Current: ${currentQuestion?.multiplicand} × ${currentQuestion?.multiplier}`);
+    
+    const nextQuestionData = getNextQuestion(
+      questions, 
+      mode, 
+      currentQuestionIndex, 
+      lastQuestionId || undefined
+    );
     
     if (nextQuestionData.question) {
+      console.log(`➡️ Next question: ${nextQuestionData.question.multiplicand} × ${nextQuestionData.question.multiplier}`);
       setCurrentQuestionIndex(nextQuestionData.index);
+      setLastQuestionId(currentQuestion?.id || null);
       setUserAnswer('');
       setAttempts(0);
       setShowFeedback(null);
     } else if (nextQuestionData.isComplete) {
+      console.log('🏁 Session complete - no more questions available');
       const completedSession = {
         ...session,
         endTime: Date.now()
       };
       onSessionComplete(completedSession);
+    } else {
+      // Fallback: refresh question pool for endless mode
+      if (mode === 'endless') {
+        console.log('🔄 Refreshing question pool for endless mode');
+        const refreshedQuestions = refreshQuestionPool(questions, selectedTables);
+        setQuestions(refreshedQuestions);
+        setCurrentQuestionIndex(0);
+        setLastQuestionId(null);
+        setUserAnswer('');
+        setAttempts(0);
+        setShowFeedback(null);
+      }
     }
   };
 
@@ -133,13 +157,13 @@ const Gameplay: React.FC<GameplayProps> = ({
     const isCorrect = answer === currentQuestion.answer;
 
     if (isCorrect) {
-      console.log('🎉 Correct answer! Triggering confetti celebration...');
+      console.log(`🎉 Correct answer for ${currentQuestion.multiplicand} × ${currentQuestion.multiplier} = ${answer}`);
       setShowFeedback('correct');
       
       // Trigger confetti immediately
       setShowConfetti(true);
-      console.log('🎊 Confetti state set to true');
       
+      // Mark current question as completed
       const updatedQuestions = [...questions];
       updatedQuestions[currentQuestionIndex] = { ...currentQuestion, completed: true };
       setQuestions(updatedQuestions);
@@ -159,11 +183,12 @@ const Gameplay: React.FC<GameplayProps> = ({
 
       // Move to next question after confetti
       setTimeout(() => {
-        console.log('⏭️ Moving to next question...');
+        console.log('⏭️ Moving to next question after correct answer...');
         setShowConfetti(false);
         moveToNextQuestion();
       }, 3000);
     } else {
+      console.log(`❌ Incorrect answer for ${currentQuestion.multiplicand} × ${currentQuestion.multiplier}: ${answer} (correct: ${currentQuestion.answer})`);
       setShowFeedback('incorrect');
       setAttempts(prev => prev + 1);
       setSession(prev => ({
@@ -180,6 +205,8 @@ const Gameplay: React.FC<GameplayProps> = ({
 
   const handleSkip = () => {
     if (!currentQuestion) return;
+
+    console.log(`⏭️ Skipping question: ${currentQuestion.multiplicand} × ${currentQuestion.multiplier}`);
 
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex] = { ...currentQuestion, skipped: true };
@@ -198,6 +225,7 @@ const Gameplay: React.FC<GameplayProps> = ({
   };
 
   const handleEndSession = () => {
+    console.log('🏁 Ending endless session manually');
     const completedSession = {
       ...session,
       endTime: Date.now()
@@ -209,7 +237,7 @@ const Gameplay: React.FC<GameplayProps> = ({
     if (mode === 'practice') {
       const totalQuestions = questions.length;
       const completedQuestions = questions.filter(q => q.completed || q.skipped).length;
-      return (completedQuestions / totalQuestions) * 100;
+      return totalQuestions > 0 ? (completedQuestions / totalQuestions) * 100 : 0;
     } else {
       return Math.min((endlessCorrectCount / 20) * 100, 100);
     }
@@ -236,7 +264,7 @@ const Gameplay: React.FC<GameplayProps> = ({
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4 relative overflow-hidden`}>
-      {/* Confetti Effect - Must be at the very top level with highest z-index */}
+      {/* Confetti Effect */}
       <ConfettiEffect 
         trigger={showConfetti} 
         onComplete={() => {
@@ -378,7 +406,6 @@ const Gameplay: React.FC<GameplayProps> = ({
                   placeholder="?"
                   className="input-rpg text-3xl"
                 />
-                {/* Removed the ✨ emoji completely - only confetti particles will show */}
                 {showFeedback === 'incorrect' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-4xl animate-wiggle">❌</div>

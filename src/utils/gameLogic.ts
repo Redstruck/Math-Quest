@@ -7,7 +7,7 @@ export const generateQuestionsForMode = (
   const questions: Question[] = [];
   
   if (mode === 'practice') {
-    // Practice mode: Generate all questions for selected tables
+    // Practice mode: Generate all questions for selected tables (once each)
     tables.forEach(table => {
       for (let i = 1; i <= 12; i++) {
         questions.push({
@@ -21,9 +21,13 @@ export const generateQuestionsForMode = (
         });
       }
     });
+    
+    // Shuffle questions for practice mode to avoid predictable order
+    return questions.sort(() => Math.random() - 0.5);
   } else {
-    // Endless mode: Generate a large pool of questions for random selection
-    for (let round = 0; round < 10; round++) {
+    // Endless mode: Generate a much larger pool to prevent repetition
+    // Create 50 rounds of questions to ensure variety
+    for (let round = 0; round < 50; round++) {
       tables.forEach(table => {
         for (let i = 1; i <= 12; i++) {
           questions.push({
@@ -38,10 +42,10 @@ export const generateQuestionsForMode = (
         }
       });
     }
+    
+    // Thoroughly shuffle the large pool
+    return questions.sort(() => Math.random() - 0.5);
   }
-  
-  // Shuffle questions
-  return questions.sort(() => Math.random() - 0.5);
 };
 
 export const getTableProgress = (questions: Question[], tables: number[]): TableProgress[] => {
@@ -84,34 +88,107 @@ export const calculateAccuracy = (correct: number, total: number): number => {
 export const getNextQuestion = (
   questions: Question[], 
   mode: 'practice' | 'endless',
-  currentIndex: number
+  currentIndex: number,
+  lastQuestionId?: string
 ): { question: Question | null; index: number; isComplete: boolean } => {
   
+  console.log(`🔍 Finding next question - Mode: ${mode}, Current Index: ${currentIndex}, Last Question: ${lastQuestionId}`);
+  
   if (mode === 'practice') {
-    // Find next incomplete question
+    // Practice mode: Find the next incomplete question in order
     for (let i = 0; i < questions.length; i++) {
       const question = questions[i];
       if (!question.completed && !question.skipped) {
+        console.log(`✅ Found next practice question at index ${i}: ${question.multiplicand} × ${question.multiplier}`);
         return { question, index: i, isComplete: false };
       }
     }
+    
+    // All questions completed
+    console.log('🏁 All practice questions completed');
     return { question: null, index: -1, isComplete: true };
+    
   } else {
-    // Endless mode: continue with next question in shuffled order
-    if (currentIndex + 1 < questions.length) {
-      return { 
-        question: questions[currentIndex + 1], 
-        index: currentIndex + 1, 
-        isComplete: false 
-      };
-    } else {
-      // Reshuffle and continue
-      const availableQuestions = questions.filter(q => !q.completed && !q.skipped);
-      if (availableQuestions.length > 0) {
-        const shuffled = availableQuestions.sort(() => Math.random() - 0.5);
-        return { question: shuffled[0], index: 0, isComplete: false };
-      }
-      return { question: null, index: -1, isComplete: true };
+    // Endless mode: Find next question that isn't the same as the last one
+    const availableQuestions = questions.filter(q => !q.completed && !q.skipped);
+    
+    if (availableQuestions.length === 0) {
+      console.log('🔄 No available questions, resetting all questions for endless mode');
+      // Reset all questions for endless mode
+      const resetQuestions = questions.map(q => ({ ...q, completed: false, skipped: false }));
+      const shuffled = resetQuestions.sort(() => Math.random() - 0.5);
+      return { question: shuffled[0], index: 0, isComplete: false };
     }
+    
+    // Filter out the last question to prevent immediate repetition
+    let filteredQuestions = availableQuestions;
+    if (lastQuestionId) {
+      filteredQuestions = availableQuestions.filter(q => q.id !== lastQuestionId);
+      
+      // If filtering removes all questions, use the full available pool
+      if (filteredQuestions.length === 0) {
+        filteredQuestions = availableQuestions;
+      }
+    }
+    
+    // Shuffle and pick the first question
+    const shuffled = filteredQuestions.sort(() => Math.random() - 0.5);
+    const nextQuestion = shuffled[0];
+    
+    // Find the index of this question in the original array
+    const originalIndex = questions.findIndex(q => q.id === nextQuestion.id);
+    
+    console.log(`✅ Found next endless question: ${nextQuestion.multiplicand} × ${nextQuestion.multiplier} (avoiding repetition)`);
+    return { question: nextQuestion, index: originalIndex, isComplete: false };
   }
+};
+
+// New utility function to prevent consecutive identical questions
+export const getRandomQuestionExcluding = (
+  questions: Question[],
+  excludeQuestionId?: string
+): Question | null => {
+  const availableQuestions = questions.filter(q => 
+    !q.completed && 
+    !q.skipped && 
+    q.id !== excludeQuestionId
+  );
+  
+  if (availableQuestions.length === 0) {
+    return null;
+  }
+  
+  const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+  return availableQuestions[randomIndex];
+};
+
+// Enhanced question pool management for endless mode
+export const refreshQuestionPool = (
+  questions: Question[],
+  tables: number[]
+): Question[] => {
+  console.log('🔄 Refreshing question pool for endless mode');
+  
+  // Reset completion status and generate fresh questions
+  const freshQuestions: Question[] = [];
+  
+  // Generate multiple rounds to ensure variety
+  for (let round = 0; round < 25; round++) {
+    tables.forEach(table => {
+      for (let i = 1; i <= 12; i++) {
+        freshQuestions.push({
+          multiplicand: table,
+          multiplier: i,
+          answer: table * i,
+          tableId: table,
+          id: `${table}-${i}-fresh-${round}-${Date.now()}`,
+          completed: false,
+          skipped: false
+        });
+      }
+    });
+  }
+  
+  // Thoroughly shuffle the new pool
+  return freshQuestions.sort(() => Math.random() - 0.5);
 };
