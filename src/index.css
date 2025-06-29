@@ -46,6 +46,30 @@
 }
 
 @layer components {
+  /* Confetti Animation Styles */
+  .confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px; 
+    transform-origin: center bottom;
+    animation: fall 4s linear infinite;
+    z-index: 10001;
+  }
+
+  .confetti.square {
+    clip-path: polygon(0% 0%, 0% 100%, 100% 100%, 100% 0%);
+  }
+
+  .confetti.triangle {
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(100vh) rotate(720deg);
+    }
+  }
+
   .rpg-card {
     @apply bg-gradient-to-br from-stone-100 via-amber-50 to-yellow-100;
     @apply border-4 border-amber-600 rounded-2xl shadow-rpg;
