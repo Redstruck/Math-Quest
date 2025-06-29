@@ -133,9 +133,14 @@ const Gameplay: React.FC<GameplayProps> = ({
     const isCorrect = answer === currentQuestion.answer;
 
     if (isCorrect) {
-      console.log('Correct answer! Triggering confetti...');
+      console.log('🎉 Correct answer! Triggering confetti celebration...');
       setShowFeedback('correct');
-      setShowConfetti(true); // Trigger confetti animation
+      
+      // Trigger confetti with a small delay to ensure UI is ready
+      setTimeout(() => {
+        console.log('🎊 Setting confetti state to true');
+        setShowConfetti(true);
+      }, 100);
       
       const updatedQuestions = [...questions];
       updatedQuestions[currentQuestionIndex] = { ...currentQuestion, completed: true };
@@ -154,11 +159,12 @@ const Gameplay: React.FC<GameplayProps> = ({
       const newTotal = getTotalCorrectAnswers() + 1;
       saveTotalCorrectAnswers(newTotal);
 
+      // Move to next question after confetti
       setTimeout(() => {
-        console.log('Moving to next question...');
+        console.log('⏭️ Moving to next question...');
         setShowConfetti(false);
         moveToNextQuestion();
-      }, 2500);
+      }, 3000);
     } else {
       setShowFeedback('incorrect');
       setAttempts(prev => prev + 1);
@@ -232,16 +238,14 @@ const Gameplay: React.FC<GameplayProps> = ({
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4 relative overflow-hidden`}>
-      {/* Confetti Effect - positioned at the top level */}
-      {showConfetti && (
-        <ConfettiEffect 
-          trigger={showConfetti} 
-          onComplete={() => {
-            console.log('Confetti completed callback');
-            setShowConfetti(false);
-          }} 
-        />
-      )}
+      {/* Confetti Effect - Must be at the very top level with highest z-index */}
+      <ConfettiEffect 
+        trigger={showConfetti} 
+        onComplete={() => {
+          console.log('🏁 Confetti animation completed');
+          setShowConfetti(false);
+        }} 
+      />
 
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
