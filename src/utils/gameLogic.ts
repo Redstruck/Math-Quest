@@ -93,9 +93,10 @@ export const getNextQuestion = (
 ): { question: Question | null; index: number; isComplete: boolean } => {
   
   console.log(`🔍 Finding next question - Mode: ${mode}, Current Index: ${currentIndex}, Last Question: ${lastQuestionId}`);
+  console.log(`📊 Questions status:`, questions.map(q => `${q.multiplicand}×${q.multiplier}: ${q.completed ? 'DONE' : q.skipped ? 'SKIP' : 'PENDING'}`));
   
   if (mode === 'practice') {
-    // Practice mode: Find the next incomplete question in order
+    // Practice mode: Find the next incomplete question in sequential order
     for (let i = 0; i < questions.length; i++) {
       const question = questions[i];
       if (!question.completed && !question.skipped) {
@@ -112,6 +113,8 @@ export const getNextQuestion = (
     // Endless mode: Find next question that isn't the same as the last one
     const availableQuestions = questions.filter(q => !q.completed && !q.skipped);
     
+    console.log(`📈 Available endless questions: ${availableQuestions.length}`);
+    
     if (availableQuestions.length === 0) {
       console.log('🔄 No available questions, resetting all questions for endless mode');
       // Reset all questions for endless mode
@@ -124,9 +127,11 @@ export const getNextQuestion = (
     let filteredQuestions = availableQuestions;
     if (lastQuestionId) {
       filteredQuestions = availableQuestions.filter(q => q.id !== lastQuestionId);
+      console.log(`🚫 Filtering out last question ${lastQuestionId}, remaining: ${filteredQuestions.length}`);
       
       // If filtering removes all questions, use the full available pool
       if (filteredQuestions.length === 0) {
+        console.log('⚠️ No questions left after filtering, using full pool');
         filteredQuestions = availableQuestions;
       }
     }
@@ -138,7 +143,7 @@ export const getNextQuestion = (
     // Find the index of this question in the original array
     const originalIndex = questions.findIndex(q => q.id === nextQuestion.id);
     
-    console.log(`✅ Found next endless question: ${nextQuestion.multiplicand} × ${nextQuestion.multiplier} (avoiding repetition)`);
+    console.log(`✅ Found next endless question: ${nextQuestion.multiplicand} × ${nextQuestion.multiplier} at index ${originalIndex}`);
     return { question: nextQuestion, index: originalIndex, isComplete: false };
   }
 };

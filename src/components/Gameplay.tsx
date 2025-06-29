@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ArrowLeft, SkipForward, Target, Zap, CheckCircle, Crown, Flame } from 'lucide-react';
 import { Question, GameSession, TableProgress } from '../types';
 import { addPoints, saveTotalCorrectAnswers, getTotalCorrectAnswers, getActivePet } from '../utils/localStorage';
@@ -31,6 +31,7 @@ const Gameplay: React.FC<GameplayProps> = ({
   const [endlessCorrectCount, setEndlessCorrectCount] = useState(0);
   const [canEndSession, setCanEndSession] = useState(false);
   const [lastQuestionId, setLastQuestionId] = useState<string | null>(null);
+  const [isProcessingAnswer, setIsProcessingAnswer] = useState(false);
   const [session, setSession] = useState<GameSession>({
     correctAnswers: 0,
     wrongAttempts: 0,
@@ -76,7 +77,7 @@ const Gameplay: React.FC<GameplayProps> = ({
   // Keyboard input handling
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (showFeedback) return;
+      if (showFeedback || isProcessingAnswer) return;
 
       if (event.key >= '0' && event.key <= '9') {
         event.preventDefault();
@@ -95,27 +96,31 @@ const Gameplay: React.FC<GameplayProps> = ({
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [userAnswer, showFeedback]);
+  }, [userAnswer, showFeedback, isProcessingAnswer]);
 
   const handleNumberInput = (num: string) => {
-    if (userAnswer.length < 4) {
+    if (userAnswer.length < 4 && !isProcessingAnswer) {
       setUserAnswer(prev => prev + num);
     }
   };
 
   const handleBackspace = () => {
-    setUserAnswer(prev => prev.slice(0, -1));
+    if (!isProcessingAnswer) {
+      setUserAnswer(prev => prev.slice(0, -1));
+    }
   };
 
   const handleClear = () => {
-    setUserAnswer('');
+    if (!isProcessingAnswer) {
+      setUserAnswer('');
+    }
   };
 
-  const moveToNextQuestion = () => {
+  const moveToNextQuestion = useCallback((updatedQuestions: Question[]) => {
     console.log(`🎯 Moving to next question - Current: ${currentQuestion?.multiplicand} × ${currentQuestion?.multiplier}`);
     
     const nextQuestionData = getNextQuestion(
-      questions, 
+      updatedQuestions, 
       mode, 
       currentQuestionIndex, 
       lastQuestionId || undefined
@@ -128,6 +133,7 @@ const Gameplay: React.FC<GameplayProps> = ({
       setUserAnswer('');
       setAttempts(0);
       setShowFeedback(null);
+      setIsProcessingAnswer(false);
     } else if (nextQuestionData.isComplete) {
       console.log('🏁 Session complete - no more questions available');
       const completedSession = {
@@ -139,19 +145,23 @@ const Gameplay: React.FC<GameplayProps> = ({
       // Fallback: refresh question pool for endless mode
       if (mode === 'endless') {
         console.log('🔄 Refreshing question pool for endless mode');
-        const refreshedQuestions = refreshQuestionPool(questions, selectedTables);
+        const refreshedQuestions = refreshQuestionPool(updatedQuestions, selectedTables);
         setQuestions(refreshedQuestions);
         setCurrentQuestionIndex(0);
         setLastQuestionId(null);
         setUserAnswer('');
         setAttempts(0);
         setShowFeedback(null);
+        setIsProcessingAnswer(false);
       }
     }
-  };
+  }, [currentQuestion, mode, currentQuestionIndex, lastQuestionId, session, selectedTables, onSessionComplete]);
 
   const handleSubmit = () => {
-    if (!userAnswer || !currentQuestion) return;
+    if (!userAnswer || !currentQuestion || isProcessingAnswer) return;
+
+    console.log(`🎯 Processing answer: ${userAnswer} for ${currentQuestion.multiplicand} × ${currentQuestion.multiplier}`);
+    setIsProcessingAnswer(true);
 
     const answer = parseInt(userAnswer, 10);
     const isCorrect = answer === currentQuestion.answer;
@@ -163,9 +173,11 @@ const Gameplay: React.FC<GameplayProps> = ({
       // Trigger confetti immediately
       setShowConfetti(true);
       
-      // Mark current question as completed
+      // Mark current question as completed IMMEDIATELY
       const updatedQuestions = [...questions];
       updatedQuestions[currentQuestionIndex] = { ...currentQuestion, completed: true };
+      
+      // Update state immediately
       setQuestions(updatedQuestions);
 
       setSession(prev => ({
@@ -181,11 +193,11 @@ const Gameplay: React.FC<GameplayProps> = ({
       const newTotal = getTotalCorrectAnswers() + 1;
       saveTotalCorrectAnswers(newTotal);
 
-      // Move to next question after confetti
+      // Move to next question after confetti with updated questions
       setTimeout(() => {
         console.log('⏭️ Moving to next question after correct answer...');
         setShowConfetti(false);
-        moveToNextQuestion();
+        moveToNextQuestion(updatedQuestions); // Pass updated questions directly
       }, 3000);
     } else {
       console.log(`❌ Incorrect answer for ${currentQuestion.multiplicand} × ${currentQuestion.multiplier}: ${answer} (correct: ${currentQuestion.answer})`);
@@ -199,14 +211,16 @@ const Gameplay: React.FC<GameplayProps> = ({
       setTimeout(() => {
         setShowFeedback(null);
         setUserAnswer('');
+        setIsProcessingAnswer(false);
       }, 1000);
     }
   };
 
   const handleSkip = () => {
-    if (!currentQuestion) return;
+    if (!currentQuestion || isProcessingAnswer) return;
 
     console.log(`⏭️ Skipping question: ${currentQuestion.multiplicand} × ${currentQuestion.multiplier}`);
+    setIsProcessingAnswer(true);
 
     const updatedQuestions = [...questions];
     updatedQuestions[currentQuestionIndex] = { ...currentQuestion, skipped: true };
@@ -221,7 +235,10 @@ const Gameplay: React.FC<GameplayProps> = ({
     setAttempts(0);
     setShowFeedback(null);
     
-    moveToNextQuestion();
+    // Use updated questions immediately
+    setTimeout(() => {
+      moveToNextQuestion(updatedQuestions);
+    }, 100);
   };
 
   const handleEndSession = () => {
@@ -384,6 +401,7 @@ const Gameplay: React.FC<GameplayProps> = ({
               rpg-card p-6 mb-4 text-center transform transition-all duration-500 opacity-0 animate-fade-in-scale animation-delay-200
               ${showFeedback === 'correct' ? 'animate-success shadow-golden' : ''}
               ${showFeedback === 'incorrect' ? 'animate-error' : ''}
+              ${isProcessingAnswer ? 'pointer-events-none opacity-75' : ''}
             `}>
               <div className={`
                 inline-block px-3 py-1 rounded-xl mb-4 bg-gradient-to-r ${tableColors[currentQuestion.tableId]}
@@ -435,9 +453,11 @@ const Gameplay: React.FC<GameplayProps> = ({
                       else if (button === '⌫') handleBackspace();
                       else if (button !== 'Clear' && button !== '⌫') handleNumberInput(button);
                     }}
+                    disabled={isProcessingAnswer}
                     className={`
                       ${button === 'Clear' || button === '⌫' ? 'special-button' : 'number-pad-button'}
                       h-12 text-lg font-bold opacity-0 animate-fade-in
+                      ${isProcessingAnswer ? 'opacity-50 cursor-not-allowed' : ''}
                     `}
                     style={{ animationDelay: `${500 + index * 30}ms` }}
                   >
@@ -450,20 +470,20 @@ const Gameplay: React.FC<GameplayProps> = ({
               <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
                 <button
                   onClick={handleSubmit}
-                  disabled={!userAnswer || showFeedback !== null}
+                  disabled={!userAnswer || showFeedback !== null || isProcessingAnswer}
                   className={`
                     w-full py-3 rounded-xl font-bold text-base transition-all duration-200 transform hover:scale-105 shadow-md opacity-0 animate-fade-in-up animation-delay-600
-                    ${userAnswer && showFeedback === null
+                    ${userAnswer && showFeedback === null && !isProcessingAnswer
                       ? 'rpg-button'
                       : 'bg-gray-400 text-gray-600 cursor-not-allowed border-2 border-gray-500'
                     }
                   `}
                 >
-                  Cast Answer Spell
+                  {isProcessingAnswer ? 'Processing...' : 'Cast Answer Spell'}
                 </button>
 
                 {/* Skip Button */}
-                {skipEnabled && attempts >= 3 && showFeedback !== 'correct' && (
+                {skipEnabled && attempts >= 3 && showFeedback !== 'correct' && !isProcessingAnswer && (
                   <button
                     onClick={handleSkip}
                     className="w-full py-2 rounded-xl font-semibold text-sm ruby-button transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
@@ -474,7 +494,7 @@ const Gameplay: React.FC<GameplayProps> = ({
                 )}
 
                 {/* End Session Button (Endless Mode) */}
-                {mode === 'endless' && canEndSession && (
+                {mode === 'endless' && canEndSession && !isProcessingAnswer && (
                   <button
                     onClick={handleEndSession}
                     className="w-full py-2 rounded-xl font-semibold text-sm emerald-button flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
