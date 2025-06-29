@@ -44,7 +44,7 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
     
     if (ownedThemeItems.length === 0) {
       return (
-        <div className="text-center py-12">
+        <div className="text-center py-12 opacity-0 animate-fade-in-scale">
           <div className="text-6xl mb-4">🎨</div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">No Themes Yet</h3>
           <p className="text-gray-600">Visit the shop to purchase beautiful themes!</p>
@@ -54,16 +54,17 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
 
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {ownedThemeItems.map(themeItem => {
+        {ownedThemeItems.map((themeItem, index) => {
           const isActive = currentTheme === themeItem.id;
 
           return (
             <div
               key={themeItem.id}
               className={`
-                bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105
+                bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105 opacity-0 animate-fade-in-up
                 ${isActive ? 'ring-4 ring-blue-400' : ''}
               `}
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="text-center mb-4">
                 <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${themeItem.colors.primary} flex items-center justify-center text-2xl mb-3`}>
@@ -96,7 +97,7 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
     
     if (ownedBadgeItems.length === 0) {
       return (
-        <div className="text-center py-12">
+        <div className="text-center py-12 opacity-0 animate-fade-in-scale">
           <div className="text-6xl mb-4">🏆</div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">No Badges Yet</h3>
           <p className="text-gray-600">Complete achievements or visit the shop to earn badges!</p>
@@ -106,10 +107,11 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
 
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-        {ownedBadgeItems.map(badge => (
+        {ownedBadgeItems.map((badge, index) => (
           <div
             key={badge.id}
-            className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg transition-all duration-300 transform hover:scale-105"
+            className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg transition-all duration-300 transform hover:scale-105 opacity-0 animate-fade-in-up"
+            style={{ animationDelay: `${index * 50}ms` }}
           >
             <div className="text-center">
               <div className={`w-12 h-12 mx-auto rounded-xl bg-gradient-to-r ${badge.color} flex items-center justify-center text-2xl mb-2`}>
@@ -134,7 +136,7 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
     
     if (ownedPetItems.length === 0) {
       return (
-        <div className="text-center py-12">
+        <div className="text-center py-12 opacity-0 animate-fade-in-scale">
           <div className="text-6xl mb-4">🐾</div>
           <h3 className="text-xl font-bold text-gray-800 mb-2">No Pets Yet</h3>
           <p className="text-gray-600">Visit the shop to adopt adorable companions!</p>
@@ -144,16 +146,17 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
 
     return (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {ownedPetItems.map(pet => {
+        {ownedPetItems.map((pet, index) => {
           const isActive = activePet === pet.id;
 
           return (
             <div
               key={pet.id}
               className={`
-                bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105
+                bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105 opacity-0 animate-fade-in-up
                 ${isActive ? 'ring-4 ring-green-400' : ''}
               `}
+              style={{ animationDelay: `${index * 100}ms` }}
             >
               <div className="text-center mb-4">
                 <div className="text-6xl mb-3">{pet.emoji}</div>
@@ -201,7 +204,7 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4`}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 opacity-0 animate-fade-in">
           <button
             onClick={onBack}
             className="p-3 bg-white/70 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -216,7 +219,7 @@ const Collection: React.FC<CollectionProps> = ({ onBack }) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white/70 backdrop-blur-sm rounded-2xl p-2 shadow-lg mb-6">
+        <div className="flex bg-white/70 backdrop-blur-sm rounded-2xl p-2 shadow-lg mb-6 opacity-0 animate-fade-in-up animation-delay-100">
           {[
             { id: 'themes', label: 'Themes', icon: '🎨', count: stats.themes },
             { id: 'badges', label: 'Badges', icon: '🏆', count: stats.badges },

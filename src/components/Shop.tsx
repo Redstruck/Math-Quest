@@ -75,7 +75,7 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
 
   const renderThemes = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {themes.map(themeItem => {
+      {themes.map((themeItem, index) => {
         const isOwned = ownedThemes.includes(themeItem.id);
         const isActive = currentTheme === themeItem.id;
         const canAfford = points >= themeItem.price;
@@ -85,10 +85,11 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
           <div
             key={themeItem.id}
             className={`
-              bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105
+              bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105 opacity-0 animate-fade-in-up
               ${isPurchasing ? 'animate-pulse bg-green-100' : ''}
               ${isActive ? 'ring-4 ring-blue-400' : ''}
             `}
+            style={{ animationDelay: `${index * 100}ms` }}
           >
             <div className="text-center mb-4">
               <div className={`w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br ${themeItem.colors.primary} flex items-center justify-center text-2xl mb-3`}>
@@ -146,7 +147,7 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
 
   const renderBadges = () => (
     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-      {badges.map(badge => {
+      {badges.map((badge, index) => {
         const isOwned = ownedBadges.includes(badge.id);
         const canAfford = badge.price ? points >= badge.price : true;
         const isPurchasing = purchaseAnimation === badge.id;
@@ -156,10 +157,11 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
           <div
             key={badge.id}
             className={`
-              bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg transition-all duration-300 transform hover:scale-105
+              bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg transition-all duration-300 transform hover:scale-105 opacity-0 animate-fade-in-up
               ${isPurchasing ? 'animate-pulse bg-green-100' : ''}
               ${isOwned ? 'ring-2 ring-green-400' : ''}
             `}
+            style={{ animationDelay: `${index * 50}ms` }}
           >
             <div className="text-center">
               <div className={`
@@ -209,7 +211,7 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
 
   const renderPets = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      {pets.map(pet => {
+      {pets.map((pet, index) => {
         const isOwned = ownedPets.includes(pet.id);
         const isActive = activePet === pet.id;
         const canAfford = points >= pet.price;
@@ -219,10 +221,11 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
           <div
             key={pet.id}
             className={`
-              bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105
+              bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg transition-all duration-300 transform hover:scale-105 opacity-0 animate-fade-in-up
               ${isPurchasing ? 'animate-pulse bg-green-100' : ''}
               ${isActive ? 'ring-4 ring-green-400' : ''}
             `}
+            style={{ animationDelay: `${index * 100}ms` }}
           >
             <div className="text-center mb-4">
               <div className="text-6xl mb-3">{pet.emoji}</div>
@@ -279,7 +282,7 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4`}>
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-8 opacity-0 animate-fade-in">
           <button
             onClick={onBack}
             className="p-3 bg-white/70 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -297,7 +300,7 @@ const Shop: React.FC<ShopProps> = ({ onBack }) => {
         </div>
 
         {/* Tabs */}
-        <div className="flex bg-white/70 backdrop-blur-sm rounded-2xl p-2 shadow-lg mb-6">
+        <div className="flex bg-white/70 backdrop-blur-sm rounded-2xl p-2 shadow-lg mb-6 opacity-0 animate-fade-in-up animation-delay-100">
           {[
             { id: 'themes', label: 'Themes', icon: '🎨' },
             { id: 'badges', label: 'Badges', icon: '🏆' },

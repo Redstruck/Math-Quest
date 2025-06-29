@@ -215,7 +215,7 @@ const Gameplay: React.FC<GameplayProps> = ({
   if (!currentQuestion) {
     return (
       <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} flex items-center justify-center p-4`}>
-        <div className="text-center animate-scale-in">
+        <div className="text-center opacity-0 animate-fade-in-scale">
           <div className="text-8xl mb-6 animate-bounce-gentle">🏆</div>
           <h2 className="text-4xl font-bold title-rpg mb-2">Quest Complete!</h2>
           <p className="subtitle-rpg text-lg">Victory is yours, brave adventurer!</p>
@@ -228,14 +228,14 @@ const Gameplay: React.FC<GameplayProps> = ({
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4 relative overflow-hidden`}>
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-10 left-10 w-16 h-16 bg-yellow-300/20 rounded-full animate-float"></div>
-        <div className="absolute top-32 right-20 w-12 h-12 bg-purple-300/20 rounded-full animate-float animation-delay-400"></div>
-        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-blue-300/20 rounded-full animate-float animation-delay-600"></div>
+        <div className="absolute top-10 left-10 w-16 h-16 bg-yellow-300/10 rounded-full animate-float"></div>
+        <div className="absolute top-32 right-20 w-12 h-12 bg-purple-300/10 rounded-full animate-float animation-delay-400"></div>
+        <div className="absolute bottom-20 left-1/4 w-20 h-20 bg-blue-300/10 rounded-full animate-float animation-delay-600"></div>
       </div>
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 animate-slide-in">
+        <div className="flex items-center justify-between mb-6 opacity-0 animate-fade-in">
           <button
             onClick={onBack}
             className="p-3 glass-rpg rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -287,15 +287,15 @@ const Gameplay: React.FC<GameplayProps> = ({
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Table Progress Sidebar */}
-          <div className="lg:col-span-1 animate-slide-in animation-delay-200">
+          <div className="lg:col-span-1 opacity-0 animate-fade-in-up animation-delay-100">
             <div className="rpg-card p-6">
               <h3 className="text-xl font-bold title-rpg mb-4 flex items-center">
                 <Crown className="w-5 h-5 mr-2 text-amber-600" />
                 Quest Progress
               </h3>
               <div className="space-y-3">
-                {tableProgress.map(table => (
-                  <div key={table.tableId} className="relative">
+                {tableProgress.map((table, index) => (
+                  <div key={table.tableId} className="relative opacity-0 animate-fade-in" style={{ animationDelay: `${200 + index * 100}ms` }}>
                     <div className={`
                       table-progress-card
                       ${currentQuestion.tableId === table.tableId ? 'active' : ''}
@@ -334,7 +334,7 @@ const Gameplay: React.FC<GameplayProps> = ({
           <div className="lg:col-span-2">
             {/* Current Question */}
             <div className={`
-              rpg-card p-8 mb-6 text-center transform transition-all duration-500 animate-scale-in
+              rpg-card p-8 mb-6 text-center transform transition-all duration-500 opacity-0 animate-fade-in-scale animation-delay-200
               ${showFeedback === 'correct' ? 'animate-success shadow-golden' : ''}
               ${showFeedback === 'incorrect' ? 'animate-error' : ''}
             `}>
@@ -378,12 +378,12 @@ const Gameplay: React.FC<GameplayProps> = ({
             </div>
 
             {/* Keyboard Hint */}
-            <div className="text-center mb-4 subtitle-rpg animate-slide-in animation-delay-400">
+            <div className="text-center mb-4 subtitle-rpg opacity-0 animate-fade-in animation-delay-300">
               Use your keyboard or mystical number pad below • Press Enter to cast your answer
             </div>
 
             {/* Number Pad */}
-            <div className="rpg-card p-6 animate-slide-in animation-delay-500">
+            <div className="rpg-card p-6 opacity-0 animate-fade-in-up animation-delay-400">
               <div className="grid grid-cols-3 gap-3 mb-4">
                 {numberPadButtons.flat().map((button, index) => (
                   <button
@@ -395,7 +395,9 @@ const Gameplay: React.FC<GameplayProps> = ({
                     }}
                     className={`
                       ${button === 'Clear' || button === '⌫' ? 'special-button' : 'number-pad-button'}
+                      opacity-0 animate-fade-in
                     `}
+                    style={{ animationDelay: `${500 + index * 30}ms` }}
                   >
                     {button}
                   </button>
@@ -408,7 +410,7 @@ const Gameplay: React.FC<GameplayProps> = ({
                   onClick={handleSubmit}
                   disabled={!userAnswer || showFeedback !== null}
                   className={`
-                    w-full py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 shadow-md
+                    w-full py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 shadow-md opacity-0 animate-fade-in-up animation-delay-600
                     ${userAnswer && showFeedback === null
                       ? 'rpg-button'
                       : 'bg-gray-400 text-gray-600 cursor-not-allowed border-2 border-gray-500'
@@ -422,7 +424,7 @@ const Gameplay: React.FC<GameplayProps> = ({
                 {skipEnabled && attempts >= 3 && showFeedback !== 'correct' && (
                   <button
                     onClick={handleSkip}
-                    className="w-full py-3 rounded-xl font-semibold text-lg bg-gradient-to-br from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center space-x-2 border-2 border-orange-400"
+                    className="w-full py-3 rounded-xl font-semibold text-lg ruby-button transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
                   >
                     <SkipForward className="w-5 h-5" />
                     <span>Strategic Retreat</span>
@@ -433,7 +435,7 @@ const Gameplay: React.FC<GameplayProps> = ({
                 {mode === 'endless' && canEndSession && (
                   <button
                     onClick={handleEndSession}
-                    className="w-full py-3 rounded-xl font-semibold text-lg emerald-button border-2 flex items-center justify-center space-x-2"
+                    className="w-full py-3 rounded-xl font-semibold text-lg emerald-button flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
                   >
                     <Crown className="w-5 h-5" />
                     <span>Claim Victory ({endlessCorrectCount}/20)</span>

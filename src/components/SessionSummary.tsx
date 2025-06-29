@@ -71,7 +71,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4`}>
       <div className="max-w-md mx-auto">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-8 opacity-0 animate-fade-in-scale">
           <div className={`inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r ${getPerformanceColor()} rounded-3xl mb-4 shadow-lg`}>
             <Trophy className="w-10 h-10 text-white" />
           </div>
@@ -94,7 +94,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
         {/* Stats Cards */}
         <div className="space-y-4 mb-8">
           {/* Correct Answers */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg opacity-0 animate-fade-in-up animation-delay-100">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-3 bg-green-100 rounded-xl">
@@ -113,7 +113,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
           </div>
 
           {/* Accuracy & Attempts */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg opacity-0 animate-fade-in-up animation-delay-200">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <div className="p-3 bg-blue-100 rounded-xl">
@@ -133,7 +133,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
 
           {/* Skipped Questions (if any) */}
           {session.skippedQuestions > 0 && (
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg opacity-0 animate-fade-in-up animation-delay-300">
               <div className="flex items-center space-x-3">
                 <div className="p-3 bg-orange-100 rounded-xl">
                   <SkipForward className="w-6 h-6 text-orange-600" />
@@ -147,7 +147,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
           )}
 
           {/* Time Stats */}
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg">
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg opacity-0 animate-fade-in-up animation-delay-400">
             <div className="flex items-center space-x-3">
               <div className="p-3 bg-purple-100 rounded-xl">
                 <Clock className="w-6 h-6 text-purple-600" />
@@ -160,7 +160,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
           </div>
 
           {/* Total Points */}
-          <div className={`bg-gradient-to-r ${theme.colors.accent} rounded-2xl p-6 shadow-lg text-white`}>
+          <div className={`bg-gradient-to-r ${theme.colors.accent} rounded-2xl p-6 shadow-lg text-white opacity-0 animate-fade-in-up animation-delay-500`}>
             <div className="text-center">
               <div className="text-sm opacity-90">Total Points</div>
               <div className="text-3xl font-bold">{currentPoints}</div>
@@ -172,7 +172,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
         <div className="space-y-3">
           <button
             onClick={onPlayAgain}
-            className={`w-full bg-gradient-to-r ${theme.colors.accent} hover:opacity-90 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-3`}
+            className={`w-full bg-gradient-to-r ${theme.colors.accent} hover:opacity-90 text-white font-semibold py-4 px-6 rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-3 opacity-0 animate-fade-in-up animation-delay-600`}
           >
             <RotateCcw className="w-6 h-6" />
             <span className="text-lg">Practice Again</span>
@@ -180,7 +180,7 @@ const SessionSummary: React.FC<SessionSummaryProps> = ({ session, onBackToMenu, 
 
           <button
             onClick={onBackToMenu}
-            className="w-full bg-white/80 backdrop-blur-sm hover:bg-white text-gray-700 font-semibold py-4 px-6 rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-3"
+            className="w-full bg-white/80 backdrop-blur-sm hover:bg-white text-gray-700 font-semibold py-4 px-6 rounded-2xl shadow-lg transform transition-all duration-200 hover:scale-105 hover:shadow-xl flex items-center justify-center space-x-3 opacity-0 animate-fade-in-up animation-delay-700"
           >
             <Home className="w-6 h-6" />
             <span className="text-lg">Back to Menu</span>

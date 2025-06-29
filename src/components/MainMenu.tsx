@@ -32,7 +32,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
 
       <div className="max-w-md w-full relative z-10">
         {/* Header */}
-        <div className="text-center mb-12 animate-scale-in">
+        <div className="text-center mb-12 opacity-0 animate-fade-in-scale">
           <div className="relative mb-8">
             <div className={`inline-flex items-center justify-center w-24 h-24 bg-gradient-to-br ${theme.colors.accent} rounded-3xl shadow-rpg`}>
               <Sword className="w-12 h-12 text-white" />
@@ -42,15 +42,15 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
             </div>
           </div>
           
-          <h1 className="text-5xl font-bold title-rpg mb-3 animate-slide-in">
+          <h1 className="text-5xl font-bold title-rpg mb-3">
             Math Quest
           </h1>
-          <p className="subtitle-rpg text-lg mb-6 animate-slide-in animation-delay-200">
+          <p className="subtitle-rpg text-lg mb-6">
             Master the Ancient Art of Numbers
           </p>
           
           {/* Points Display */}
-          <div className="inline-flex items-center rpg-card px-6 py-3 shadow-golden animate-slide-in animation-delay-400">
+          <div className="inline-flex items-center rpg-card px-6 py-3 shadow-golden">
             <Star className="w-6 h-6 text-yellow-500 mr-3 animate-bounce-gentle" />
             <span className="font-bold text-amber-900 text-lg">{points}</span>
             <span className="text-amber-700 ml-2">Gold Coins</span>
@@ -58,7 +58,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
 
           {/* Active Pet */}
           {activePet && (
-            <div className="mt-6 animate-slide-in animation-delay-600">
+            <div className="mt-6">
               <div className="text-5xl animate-bounce-gentle mb-2">{activePet.emoji}</div>
               <p className="subtitle-rpg text-sm">
                 {activePet.name} stands ready to assist!
@@ -71,7 +71,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
         <div className="space-y-4">
           <button
             onClick={onStartPractice}
-            className="w-full rpg-button py-5 px-6 text-lg flex items-center justify-center space-x-3 animate-slide-in animation-delay-200"
+            className="w-full rpg-button py-5 px-6 text-lg flex items-center justify-center space-x-3 opacity-0 animate-fade-in-up animation-delay-200"
           >
             <Play className="w-6 h-6" />
             <span className="font-bold">Begin Your Quest</span>
@@ -79,7 +79,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
 
           <button
             onClick={onOpenShop}
-            className="w-full magical-button py-5 px-6 text-lg flex items-center justify-center space-x-3 animate-slide-in animation-delay-400"
+            className="w-full magical-button py-5 px-6 text-lg flex items-center justify-center space-x-3 opacity-0 animate-fade-in-up animation-delay-400"
           >
             <ShoppingBag className="w-6 h-6" />
             <span className="font-bold">Mystical Bazaar</span>
@@ -87,7 +87,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
 
           <button
             onClick={onOpenCollection}
-            className="w-full emerald-button py-5 px-6 text-lg flex items-center justify-center space-x-3 animate-slide-in animation-delay-600"
+            className="w-full emerald-button py-5 px-6 text-lg flex items-center justify-center space-x-3 opacity-0 animate-fade-in-up animation-delay-600"
           >
             <Star className="w-6 h-6" />
             <span className="font-bold">Trophy Hall</span>
@@ -95,7 +95,7 @@ const MainMenu: React.FC<MainMenuProps> = ({ onStartPractice, onOpenShop, onOpen
         </div>
 
         {/* Footer */}
-        <div className="text-center mt-12 animate-slide-in animation-delay-800">
+        <div className="text-center mt-12 opacity-0 animate-fade-in animation-delay-800">
           <p className="subtitle-rpg text-amber-600">
             "Knowledge is the greatest treasure" ⚔️
           </p>

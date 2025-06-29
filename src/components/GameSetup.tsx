@@ -53,7 +53,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
 
       <div className="max-w-2xl mx-auto relative z-10">
         {/* Header */}
-        <div className="flex items-center mb-8 animate-slide-in">
+        <div className="flex items-center mb-8 opacity-0 animate-fade-in">
           <button
             onClick={onBack}
             className="mr-4 p-3 glass-rpg rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -67,7 +67,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
         </div>
 
         {/* Mode Selection */}
-        <div className="rpg-card p-6 mb-6 animate-slide-in animation-delay-200">
+        <div className="rpg-card p-6 mb-6 opacity-0 animate-fade-in-up animation-delay-100">
           <h2 className="text-xl font-bold title-rpg mb-4 flex items-center">
             <Sword className="w-6 h-6 mr-2 text-amber-600" />
             Choose Your Path
@@ -118,7 +118,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
         </div>
 
         {/* Skip Button Toggle */}
-        <div className="rpg-card p-6 mb-6 animate-slide-in animation-delay-300">
+        <div className="rpg-card p-6 mb-6 opacity-0 animate-fade-in-up animation-delay-200">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Shield className="w-6 h-6 text-amber-600" />
@@ -145,7 +145,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
             </button>
           </div>
           {skipEnabled && (
-            <div className="mt-4 flex items-center space-x-2 text-sm text-emerald-600 animate-scale-in">
+            <div className="mt-4 flex items-center space-x-2 text-sm text-emerald-600 opacity-0 animate-fade-in animation-delay-300">
               <SkipForward className="w-4 h-4" />
               <span>Retreat option available after 3 wrong attempts</span>
             </div>
@@ -153,7 +153,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
         </div>
 
         {/* Quick Select Buttons */}
-        <div className="rpg-card p-6 mb-6 animate-slide-in animation-delay-400">
+        <div className="rpg-card p-6 mb-6 opacity-0 animate-fade-in-up animation-delay-300">
           <h2 className="text-lg font-bold title-rpg mb-4">Quick Selection</h2>
           <div className="flex flex-wrap gap-3">
             <button
@@ -180,22 +180,23 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
         </div>
 
         {/* Table Selection */}
-        <div className="rpg-card p-6 mb-6 animate-slide-in animation-delay-500">
+        <div className="rpg-card p-6 mb-6 opacity-0 animate-fade-in-up animation-delay-400">
           <h2 className="text-lg font-bold title-rpg mb-4">
             Choose Your Challenges ({selectedTables.length} selected)
           </h2>
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
-            {availableTables.map(table => (
+            {availableTables.map((table, index) => (
               <button
                 key={table}
                 onClick={() => toggleTable(table)}
                 className={`
-                  aspect-square rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-md
+                  aspect-square rounded-xl font-bold text-xl transition-all duration-300 transform hover:scale-110 shadow-md opacity-0 animate-fade-in
                   ${selectedTables.includes(table)
                     ? `bg-gradient-to-br ${theme.colors.accent} text-white shadow-magical border-2 border-yellow-400`
                     : 'number-pad-button'
                   }
                 `}
+                style={{ animationDelay: `${500 + index * 50}ms` }}
               >
                 {table}
               </button>
@@ -204,7 +205,7 @@ const GameSetup: React.FC<GameSetupProps> = ({ onBack, onStartGame }) => {
         </div>
 
         {/* Start Button */}
-        <div className="text-center animate-slide-in animation-delay-600">
+        <div className="text-center opacity-0 animate-fade-in-scale animation-delay-700">
           <button
             onClick={handleStart}
             disabled={selectedTables.length === 0}
