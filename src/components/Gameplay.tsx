@@ -5,6 +5,7 @@ import { addPoints, saveTotalCorrectAnswers, getTotalCorrectAnswers, getActivePe
 import { getCurrentThemeData } from '../utils/themes';
 import { getTableProgress, getTableColors, getNextQuestion } from '../utils/gameLogic';
 import { pets } from '../data/shopItems';
+import ConfettiEffect from './ConfettiEffect';
 
 interface GameplayProps {
   questions: Question[];
@@ -38,6 +39,7 @@ const Gameplay: React.FC<GameplayProps> = ({
   });
   const [showFeedback, setShowFeedback] = useState<'correct' | 'incorrect' | null>(null);
   const [tableProgress, setTableProgress] = useState<TableProgress[]>([]);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const currentQuestion = questions[currentQuestionIndex];
   const theme = getCurrentThemeData();
@@ -132,6 +134,7 @@ const Gameplay: React.FC<GameplayProps> = ({
 
     if (isCorrect) {
       setShowFeedback('correct');
+      setShowConfetti(true); // Trigger confetti animation
       
       const updatedQuestions = [...questions];
       updatedQuestions[currentQuestionIndex] = { ...currentQuestion, completed: true };
@@ -151,8 +154,9 @@ const Gameplay: React.FC<GameplayProps> = ({
       saveTotalCorrectAnswers(newTotal);
 
       setTimeout(() => {
+        setShowConfetti(false);
         moveToNextQuestion();
-      }, 1500);
+      }, 2000);
     } else {
       setShowFeedback('incorrect');
       setAttempts(prev => prev + 1);
@@ -226,6 +230,12 @@ const Gameplay: React.FC<GameplayProps> = ({
 
   return (
     <div className={`min-h-screen bg-gradient-to-br ${theme.colors.background} p-4 relative overflow-hidden`}>
+      {/* Confetti Effect */}
+      <ConfettiEffect 
+        trigger={showConfetti} 
+        onComplete={() => setShowConfetti(false)} 
+      />
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-10 left-10 w-16 h-16 bg-yellow-300/10 rounded-full animate-float"></div>
@@ -359,9 +369,9 @@ const Gameplay: React.FC<GameplayProps> = ({
                   placeholder="?"
                   className="input-rpg text-3xl"
                 />
-                {showFeedback === 'correct' && (
+                {showFeedback === 'correct' && !showConfetti && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-6xl animate-bounce">🎉</div>
+                    <div className="text-6xl animate-bounce">✨</div>
                   </div>
                 )}
                 {showFeedback === 'incorrect' && (
