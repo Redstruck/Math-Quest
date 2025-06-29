@@ -235,7 +235,7 @@ const Gameplay: React.FC<GameplayProps> = ({
 
       <div className="max-w-6xl mx-auto relative z-10">
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 opacity-0 animate-fade-in">
+        <div className="flex items-center justify-between mb-4 opacity-0 animate-fade-in">
           <button
             onClick={onBack}
             className="p-3 glass-rpg rounded-xl shadow-md hover:shadow-lg transition-all duration-200 hover:scale-105"
@@ -244,31 +244,31 @@ const Gameplay: React.FC<GameplayProps> = ({
           </button>
           
           <div className="text-center flex-1 mx-4">
-            <div className="flex items-center justify-center space-x-3 mb-3">
+            <div className="flex items-center justify-center space-x-3 mb-2">
               {mode === 'practice' ? (
                 <>
-                  <Target className="w-6 h-6 text-blue-600" />
-                  <span className="font-bold title-rpg text-blue-700">Training Grounds</span>
+                  <Target className="w-5 h-5 text-blue-600" />
+                  <span className="font-bold title-rpg text-blue-700 text-lg">Training Grounds</span>
                 </>
               ) : (
                 <>
-                  <Zap className="w-6 h-6 text-purple-600" />
-                  <span className="font-bold title-rpg text-purple-700">Arena Challenge</span>
+                  <Zap className="w-5 h-5 text-purple-600" />
+                  <span className="font-bold title-rpg text-purple-700 text-lg">Arena Challenge</span>
                 </>
               )}
             </div>
             
             {mode === 'practice' ? (
-              <div className="subtitle-rpg mb-2">
+              <div className="subtitle-rpg mb-2 text-sm">
                 {questions.filter(q => q.completed || q.skipped).length} of {questions.length} challenges
               </div>
             ) : (
-              <div className="subtitle-rpg mb-2">
+              <div className="subtitle-rpg mb-2 text-sm">
                 {endlessCorrectCount} / 20 victories achieved
               </div>
             )}
             
-            <div className="progress-bar-rpg w-48 mx-auto">
+            <div className="progress-bar-rpg w-40 mx-auto">
               <div 
                 className="progress-fill-rpg transition-all duration-500"
                 style={{ width: `${getProgress()}%` }}
@@ -278,22 +278,22 @@ const Gameplay: React.FC<GameplayProps> = ({
 
           {/* Active Pet */}
           {activePet && (
-            <div className="text-4xl animate-bounce-gentle">
+            <div className="text-3xl animate-bounce-gentle">
               {activePet.emoji}
             </div>
           )}
           {!activePet && <div className="w-12" />}
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
           {/* Table Progress Sidebar */}
           <div className="lg:col-span-1 opacity-0 animate-fade-in-up animation-delay-100">
-            <div className="rpg-card p-6">
-              <h3 className="text-xl font-bold title-rpg mb-4 flex items-center">
-                <Crown className="w-5 h-5 mr-2 text-amber-600" />
+            <div className="rpg-card p-4">
+              <h3 className="text-lg font-bold title-rpg mb-3 flex items-center">
+                <Crown className="w-4 h-4 mr-2 text-amber-600" />
                 Quest Progress
               </h3>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {tableProgress.map((table, index) => (
                   <div key={table.tableId} className="relative opacity-0 animate-fade-in" style={{ animationDelay: `${200 + index * 100}ms` }}>
                     <div className={`
@@ -301,26 +301,26 @@ const Gameplay: React.FC<GameplayProps> = ({
                       ${currentQuestion.tableId === table.tableId ? 'active' : ''}
                       ${table.completed === table.total ? 'completed' : ''}
                     `}>
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="font-bold text-amber-900">Table of {table.tableId}</span>
-                        <span className="text-sm subtitle-rpg">
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-bold text-amber-900 text-sm">Table of {table.tableId}</span>
+                        <span className="text-xs subtitle-rpg">
                           {table.completed}/{table.total}
                         </span>
                       </div>
-                      <div className="progress-bar-rpg">
+                      <div className="progress-bar-rpg h-2">
                         <div 
                           className="progress-fill-rpg transition-all duration-500"
                           style={{ width: `${(table.completed / table.total) * 100}%` }}
                         />
                       </div>
                       {table.completed === table.total && (
-                        <div className="absolute top-2 right-2">
-                          <CheckCircle className="w-6 h-6 text-emerald-600 animate-bounce-gentle" />
+                        <div className="absolute top-1 right-1">
+                          <CheckCircle className="w-4 h-4 text-emerald-600 animate-bounce-gentle" />
                         </div>
                       )}
                       {currentQuestion.tableId === table.tableId && (
                         <div className="absolute -top-1 -right-1">
-                          <Flame className="w-5 h-5 text-orange-500 animate-bounce" />
+                          <Flame className="w-4 h-4 text-orange-500 animate-bounce" />
                         </div>
                       )}
                     </div>
@@ -331,60 +331,60 @@ const Gameplay: React.FC<GameplayProps> = ({
           </div>
 
           {/* Main Question Area */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-3">
             {/* Current Question */}
             <div className={`
-              rpg-card p-8 mb-6 text-center transform transition-all duration-500 opacity-0 animate-fade-in-scale animation-delay-200
+              rpg-card p-6 mb-4 text-center transform transition-all duration-500 opacity-0 animate-fade-in-scale animation-delay-200
               ${showFeedback === 'correct' ? 'animate-success shadow-golden' : ''}
               ${showFeedback === 'incorrect' ? 'animate-error' : ''}
             `}>
               <div className={`
-                inline-block px-4 py-2 rounded-xl mb-6 bg-gradient-to-r ${tableColors[currentQuestion.tableId]}
+                inline-block px-3 py-1 rounded-xl mb-4 bg-gradient-to-r ${tableColors[currentQuestion.tableId]}
                 border-2 border-amber-400 shadow-md
               `}>
-                <span className="font-bold text-amber-900">
+                <span className="font-bold text-amber-900 text-sm">
                   Table of {currentQuestion.tableId}
                 </span>
               </div>
               
-              <div className="text-7xl font-bold title-rpg mb-6 text-shadow-rpg">
+              <div className="text-5xl font-bold title-rpg mb-4 text-shadow-rpg">
                 {currentQuestion.multiplicand} × {currentQuestion.multiplier}
               </div>
-              <div className="text-3xl subtitle-rpg mb-8">=</div>
+              <div className="text-2xl subtitle-rpg mb-4">=</div>
               <div className="relative">
                 <input
                   type="text"
                   value={userAnswer}
                   readOnly
                   placeholder="?"
-                  className="input-rpg"
+                  className="input-rpg text-3xl"
                 />
                 {showFeedback === 'correct' && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-8xl animate-bounce">🎉</div>
+                    <div className="text-6xl animate-bounce">🎉</div>
                   </div>
                 )}
                 {showFeedback === 'incorrect' && (
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-6xl animate-wiggle">❌</div>
+                    <div className="text-4xl animate-wiggle">❌</div>
                   </div>
                 )}
               </div>
               {attempts > 0 && showFeedback !== 'correct' && (
-                <div className="mt-4 subtitle-rpg">
+                <div className="mt-3 subtitle-rpg text-sm">
                   Attempt {attempts + 1} of 3
                 </div>
               )}
             </div>
 
             {/* Keyboard Hint */}
-            <div className="text-center mb-4 subtitle-rpg opacity-0 animate-fade-in animation-delay-300">
+            <div className="text-center mb-3 subtitle-rpg text-sm opacity-0 animate-fade-in animation-delay-300">
               Use your keyboard or mystical number pad below • Press Enter to cast your answer
             </div>
 
             {/* Number Pad */}
-            <div className="rpg-card p-6 opacity-0 animate-fade-in-up animation-delay-400">
-              <div className="grid grid-cols-3 gap-3 mb-4">
+            <div className="rpg-card p-4 opacity-0 animate-fade-in-up animation-delay-400">
+              <div className="grid grid-cols-3 gap-2 mb-3 max-w-xs mx-auto">
                 {numberPadButtons.flat().map((button, index) => (
                   <button
                     key={index}
@@ -395,7 +395,7 @@ const Gameplay: React.FC<GameplayProps> = ({
                     }}
                     className={`
                       ${button === 'Clear' || button === '⌫' ? 'special-button' : 'number-pad-button'}
-                      opacity-0 animate-fade-in
+                      h-12 text-lg font-bold opacity-0 animate-fade-in
                     `}
                     style={{ animationDelay: `${500 + index * 30}ms` }}
                   >
@@ -405,12 +405,12 @@ const Gameplay: React.FC<GameplayProps> = ({
               </div>
               
               {/* Action Buttons */}
-              <div className="grid grid-cols-1 gap-3">
+              <div className="grid grid-cols-1 gap-2 max-w-sm mx-auto">
                 <button
                   onClick={handleSubmit}
                   disabled={!userAnswer || showFeedback !== null}
                   className={`
-                    w-full py-4 rounded-xl font-bold text-lg transition-all duration-200 transform hover:scale-105 shadow-md opacity-0 animate-fade-in-up animation-delay-600
+                    w-full py-3 rounded-xl font-bold text-base transition-all duration-200 transform hover:scale-105 shadow-md opacity-0 animate-fade-in-up animation-delay-600
                     ${userAnswer && showFeedback === null
                       ? 'rpg-button'
                       : 'bg-gray-400 text-gray-600 cursor-not-allowed border-2 border-gray-500'
@@ -424,9 +424,9 @@ const Gameplay: React.FC<GameplayProps> = ({
                 {skipEnabled && attempts >= 3 && showFeedback !== 'correct' && (
                   <button
                     onClick={handleSkip}
-                    className="w-full py-3 rounded-xl font-semibold text-lg ruby-button transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
+                    className="w-full py-2 rounded-xl font-semibold text-sm ruby-button transition-all duration-200 transform hover:scale-105 shadow-md flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
                   >
-                    <SkipForward className="w-5 h-5" />
+                    <SkipForward className="w-4 h-4" />
                     <span>Strategic Retreat</span>
                   </button>
                 )}
@@ -435,9 +435,9 @@ const Gameplay: React.FC<GameplayProps> = ({
                 {mode === 'endless' && canEndSession && (
                   <button
                     onClick={handleEndSession}
-                    className="w-full py-3 rounded-xl font-semibold text-lg emerald-button flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
+                    className="w-full py-2 rounded-xl font-semibold text-sm emerald-button flex items-center justify-center space-x-2 opacity-0 animate-fade-in animation-delay-700"
                   >
-                    <Crown className="w-5 h-5" />
+                    <Crown className="w-4 h-4" />
                     <span>Claim Victory ({endlessCorrectCount}/20)</span>
                   </button>
                 )}
