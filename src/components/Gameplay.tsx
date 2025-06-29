@@ -136,11 +136,9 @@ const Gameplay: React.FC<GameplayProps> = ({
       console.log('🎉 Correct answer! Triggering confetti celebration...');
       setShowFeedback('correct');
       
-      // Trigger confetti with a small delay to ensure UI is ready
-      setTimeout(() => {
-        console.log('🎊 Setting confetti state to true');
-        setShowConfetti(true);
-      }, 100);
+      // Trigger confetti immediately
+      setShowConfetti(true);
+      console.log('🎊 Confetti state set to true');
       
       const updatedQuestions = [...questions];
       updatedQuestions[currentQuestionIndex] = { ...currentQuestion, completed: true };
@@ -380,11 +378,7 @@ const Gameplay: React.FC<GameplayProps> = ({
                   placeholder="?"
                   className="input-rpg text-3xl"
                 />
-                {showFeedback === 'correct' && !showConfetti && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-6xl animate-bounce">✨</div>
-                  </div>
-                )}
+                {/* Removed the ✨ emoji completely - only confetti particles will show */}
                 {showFeedback === 'incorrect' && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-4xl animate-wiggle">❌</div>

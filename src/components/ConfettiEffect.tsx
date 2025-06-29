@@ -39,6 +39,16 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
   }, [trigger]);
 
   useEffect(() => {
+    if (trigger && containerRef.current) {
+      console.log('⚡ Triggering confetti burst...');
+      try {
+        containerRef.current.refresh();
+        containerRef.current.play();
+      } catch (error) {
+        console.error('❌ Failed to trigger confetti:', error);
+      }
+    }
+
     if (trigger) {
       console.log('⏰ Confetti trigger activated');
       
@@ -121,11 +131,17 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
                 "#FFFF00", // Yellow
                 "#FF4500", // Red orange
                 "#9966CC", // Amethyst
-                "#50C878"  // Emerald
+                "#50C878", // Emerald
+                "#FF69B4", // Hot pink
+                "#00FF7F", // Spring green
+                "#FF8C00", // Dark orange
+                "#DA70D6", // Orchid
+                "#20B2AA", // Light sea green
+                "#FF6347"  // Tomato
               ]
             },
             shape: {
-              type: ["circle", "square"],
+              type: ["circle", "square", "triangle"],
               options: {
                 circle: {
                   radius: 1
@@ -133,25 +149,28 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
                 square: {
                   width: 1,
                   height: 1
+                },
+                triangle: {
+                  sides: 3
                 }
               }
             },
             opacity: {
               value: {
-                min: 0.6,
+                min: 0.7,
                 max: 1
               },
               animation: {
                 enable: true,
-                speed: 3,
+                speed: 2,
                 startValue: "max",
                 destroy: "min"
               }
             },
             size: {
               value: {
-                min: 6,
-                max: 16
+                min: 8,
+                max: 20
               },
               animation: {
                 enable: false
@@ -163,7 +182,7 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
             life: {
               duration: {
                 sync: true,
-                value: 6
+                value: 5
               },
               count: 1
             },
@@ -171,14 +190,14 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
               enable: true,
               gravity: {
                 enable: true,
-                acceleration: 15,
-                maxSpeed: 50
+                acceleration: 12,
+                maxSpeed: 40
               },
               speed: {
-                min: 15,
-                max: 30
+                min: 20,
+                max: 35
               },
-              decay: 0.02,
+              decay: 0.05,
               direction: "none",
               straight: false,
               outModes: {
@@ -203,7 +222,7 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
               move: true,
               animation: {
                 enable: true,
-                speed: 50
+                speed: 60
               }
             },
             tilt: {
@@ -216,27 +235,27 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
               },
               animation: {
                 enable: true,
-                speed: 50
+                speed: 60
               }
             },
             roll: {
               darken: {
                 enable: true,
-                value: 30
+                value: 25
               },
               enable: true,
               speed: {
-                min: 10,
-                max: 20
+                min: 15,
+                max: 25
               }
             },
             wobble: {
-              distance: 25,
+              distance: 30,
               enable: true,
               move: true,
               speed: {
-                min: -10,
-                max: 10
+                min: -15,
+                max: 15
               }
             }
           },
@@ -246,75 +265,95 @@ const ConfettiEffect: React.FC<ConfettiEffectProps> = ({ trigger, onComplete }) 
             {
               position: {
                 x: 50,
+                y: 25
+              },
+              life: {
+                count: 0,
+                duration: 0.3,
+                delay: 0
+              },
+              rate: {
+                delay: 0.01,
+                quantity: 150
+              },
+              size: {
+                width: 30,
+                height: 30
+              }
+            },
+            // Left side burst
+            {
+              position: {
+                x: 30,
                 y: 30
               },
               life: {
                 count: 0,
                 duration: 0.2,
-                delay: 0
+                delay: 0.1
               },
               rate: {
-                delay: 0.01,
-                quantity: 120
+                delay: 0.02,
+                quantity: 100
               },
               size: {
                 width: 20,
                 height: 20
               }
             },
-            // Left side burst
-            {
-              position: {
-                x: 35,
-                y: 35
-              },
-              life: {
-                count: 0,
-                duration: 0.15,
-                delay: 0.1
-              },
-              rate: {
-                delay: 0.02,
-                quantity: 80
-              },
-              size: {
-                width: 15,
-                height: 15
-              }
-            },
             // Right side burst
             {
               position: {
-                x: 65,
-                y: 35
+                x: 70,
+                y: 30
               },
               life: {
                 count: 0,
-                duration: 0.15,
+                duration: 0.2,
                 delay: 0.15
               },
               rate: {
                 delay: 0.02,
-                quantity: 80
+                quantity: 100
               },
               size: {
-                width: 15,
-                height: 15
+                width: 20,
+                height: 20
               }
             },
             // Secondary center burst for more density
             {
               position: {
                 x: 50,
-                y: 40
+                y: 35
               },
               life: {
                 count: 0,
-                duration: 0.1,
+                duration: 0.15,
                 delay: 0.3
               },
               rate: {
                 delay: 0.03,
+                quantity: 80
+              },
+              size: {
+                width: 15,
+                height: 15
+              }
+            },
+            // Top cascade
+            {
+              position: {
+                x: 50,
+                y: 15
+              },
+              life: {
+                count: 0,
+                duration: 0.1,
+                delay: 0.5
+              },
+              rate: {
+                delay: 0.05,
                 quantity: 60
               },
               size: {
