@@ -11,7 +11,7 @@ export const themes: Theme[] = [
       accent: 'from-emerald-500 to-teal-600',
       background: 'from-emerald-100 via-teal-50 to-cyan-100'
     },
-    preview: 'M'
+    preview: ''
   },
   {
     id: 'ocean',
@@ -23,7 +23,7 @@ export const themes: Theme[] = [
       accent: 'from-blue-500 to-teal-600',
       background: 'from-blue-200 via-cyan-100 to-teal-100'
     },
-    preview: 'S'
+    preview: ''
   },
   {
     id: 'sunset',
@@ -35,7 +35,7 @@ export const themes: Theme[] = [
       accent: 'from-orange-500 to-red-600',
       background: 'from-orange-200 via-red-100 to-pink-100'
     },
-    preview: 'D'
+    preview: ''
   },
   {
     id: 'forest',
@@ -47,7 +47,7 @@ export const themes: Theme[] = [
       accent: 'from-green-500 to-emerald-600',
       background: 'from-green-200 via-emerald-100 to-lime-100'
     },
-    preview: 'E'
+    preview: ''
   },
   {
     id: 'galaxy',
@@ -59,7 +59,7 @@ export const themes: Theme[] = [
       accent: 'from-purple-400 to-pink-500',
       background: 'from-purple-900 via-indigo-900 to-blue-900'
     },
-    preview: 'V'
+    preview: ''
   },
   {
     id: 'rainbow',
@@ -71,7 +71,7 @@ export const themes: Theme[] = [
       accent: 'from-red-500 via-yellow-500 via-green-500 via-blue-500 to-purple-500',
       background: 'from-red-200 via-yellow-200 via-green-200 via-blue-200 to-purple-200'
     },
-    preview: 'P'
+    preview: ''
   },
   {
     id: 'golden',
@@ -83,7 +83,7 @@ export const themes: Theme[] = [
       accent: 'from-yellow-500 to-amber-600',
       background: 'from-yellow-100 via-amber-100 to-orange-100'
     },
-    preview: 'G'
+    preview: ''
   },
   {
     id: 'shadow',
@@ -95,7 +95,7 @@ export const themes: Theme[] = [
       accent: 'from-red-600 to-orange-600',
       background: 'from-gray-800 via-slate-700 to-zinc-800'
     },
-    preview: 'S'
+    preview: ''
   }
 ];
 
